@@ -62,3 +62,5 @@ Dependencies: GCC/Clang C11, Make, OpenSSL 3 development headers/library. The de
 - Q17/Q18 cover DES reverse key order and key schedule; Q33 includes a full DES known-answer implementation.
 - Q37–Q40 repeat the frequency/Hill experiments listed in the supplied worksheet.
 - DES/S-DES and toy RSA/DSA/DH values are for coursework only, not real-world security.
+
+The build workflow compiles every Q01.c–Q40.c as a separate executable and runs the smoke tests.
