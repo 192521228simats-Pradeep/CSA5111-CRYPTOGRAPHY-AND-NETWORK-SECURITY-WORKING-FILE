@@ -2,7 +2,7 @@ CC ?= gcc
 CFLAGS ?= -std=c11 -O2 -Wall -Wextra -Wno-unused-function -Wno-unused-variable
 LDLIBS ?= -lcrypto -lm
 QUESTIONS := $(foreach n,$(shell seq -w 1 40),Q$(n))
-.PHONY: all clean help $(QUESTIONS)
+.PHONY: all clean help
 all: $(QUESTIONS)
 
 Q%: Q%.c common/crypto_common.h
