@@ -1,0 +1,4 @@
+/* CSA5111 Question 19: independent executable */
+#include "common/crypto_common.h"
+static void q19(void){char k[128],ivh[64],ph[MAXBUF];unsigned char key[24],iv[8],p[4096],o[4200];readstr("3DES key (48 hex digits): ",k,sizeof k);readstr("CBC IV (16 hex digits): ",ivh,sizeof ivh);readstr("Plaintext as hex bytes: ",ph,sizeof ph);int nk=unhex(k,key,24),ni=unhex(ivh,iv,8),n=unhex(ph,p,4096);if(nk!=24||ni!=8||n<0){puts("Invalid key/IV/data.");return;}int z=evp_crypt("DES-EDE3-CBC",key,iv,p,n,o,1,1);if(z<0){puts("3DES cipher unavailable; enable OpenSSL default provider.");return;}printf("3DES-CBC ciphertext: ");printhex(o,z);unsigned char back[4200];int b=evp_crypt("DES-EDE3-CBC",key,iv,o,z,back,0,1);printf("Decryption round trip: ");if(b>=0)printhex(back,b);else puts("failed");puts("Security: 3DES is stronger than single DES, but AES is preferred today.");}
+int main(void){ OSSL_PROVIDER_load(NULL,"default"); OSSL_PROVIDER_load(NULL,"legacy"); q19(); return 0; }

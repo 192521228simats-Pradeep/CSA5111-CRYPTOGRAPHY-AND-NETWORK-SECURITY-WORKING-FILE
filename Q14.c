@@ -1,0 +1,4 @@
+/* CSA5111 Question 14: independent executable */
+#include "common/crypto_common.h"
+static void q14(void){static const int k[]={9,0,1,7,23,15,21,14,11,11,2,8,9};puts("Part (a): send more money with worksheet stream:");otp_numeric("send more money",k,13,0);char desired[256];readstr("Part (b) desired plaintext (default cash not needed): ",desired,sizeof desired);if(!*desired)strcpy(desired,"cash not needed");char p[MAXBUF];clean_alpha("send more money",p);char d[MAXBUF];clean_alpha(desired,d);if(strlen(p)!=strlen(d)){puts("The two phrases must contain the same number of letters to derive a same-length key.");return;}printf("Required numeric key for desired plaintext: ");for(int i=0;p[i];i++){int cipher=mod((p[i]-'a')+k[i],26);printf("%d%s",mod(cipher-(d[i]-'a'),26),p[i+1]?",":"");}puts("");}
+int main(void){ OSSL_PROVIDER_load(NULL,"default"); OSSL_PROVIDER_load(NULL,"legacy"); q14(); return 0; }

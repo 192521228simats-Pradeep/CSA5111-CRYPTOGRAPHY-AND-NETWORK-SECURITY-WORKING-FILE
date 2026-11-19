@@ -1,0 +1,4 @@
+/* CSA5111 Question 27: independent executable */
+#include "common/crypto_common.h"
+static void q27(void){char ns[256],es[256],cs[256];readstr("RSA n (decimal): ",ns,sizeof ns);readstr("Public exponent e (decimal): ",es,sizeof es);readstr("Captured ciphertext c (decimal): ",cs,sizeof cs);BIGNUM*n=NULL,*e=NULL,*c=NULL,*m=BN_new(),*z=BN_new();BN_CTX*ctx=BN_CTX_new();BN_dec2bn(&n,ns);BN_dec2bn(&e,es);BN_dec2bn(&c,cs);int hit=0;for(int i=0;i<26;i++){BN_set_word(m,(unsigned long)i);BN_mod_exp(z,m,e,n,ctx);if(BN_cmp(z,c)==0){printf("Codebook match: plaintext character %c (%d).\n",'A'+i,i);hit=1;}}if(!hit)puts("No match among A-Z; textbook RSA is deterministic, but this ciphertext may represent another block or use a different alphabet.");BN_free(n);BN_free(e);BN_free(c);BN_free(m);BN_free(z);BN_CTX_free(ctx);}
+int main(void){ OSSL_PROVIDER_load(NULL,"default"); OSSL_PROVIDER_load(NULL,"legacy"); q27(); return 0; }

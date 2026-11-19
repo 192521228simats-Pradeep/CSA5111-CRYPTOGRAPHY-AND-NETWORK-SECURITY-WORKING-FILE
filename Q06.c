@@ -1,0 +1,4 @@
+/* CSA5111 Question 6: independent executable */
+#include "common/crypto_common.h"
+static void q06(void){readstr("Affine ciphertext: ",buf,sizeof buf);printf("Assumptions: most frequent B may represent E; second U may represent T.\n");int solutions=0;for(int a=1;a<26;a++)if(gcd_i(a,26)==1)for(int b=0;b<26;b++)if(mod(a*4+b,26)==1&&mod(a*19+b,26)==20){solutions++;char candidate[MAXBUF];int ai=inv_i(a,26);for(int t=0;buf[t];t++){char ch=buf[t];if(isalpha((unsigned char)ch)){char base=isupper((unsigned char)ch)?'A':'a';ch=(char)(base+mod(ai*(ch-base-b),26));}candidate[t]=ch;}candidate[strlen(buf)]=0;printf("Candidate a=%d b=%d score=%.2f: ",a,b,chi_score(candidate));puts(candidate);}if(!solutions)puts("No affine key matches those two frequency assumptions; try E/T or E/A alternatives.");}
+int main(void){ OSSL_PROVIDER_load(NULL,"default"); OSSL_PROVIDER_load(NULL,"legacy"); q06(); return 0; }

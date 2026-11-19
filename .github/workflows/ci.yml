@@ -1,0 +1,18 @@
+name: Build and test individual C labs
+on:
+  push:
+    branches: [ main, cryptography-lab-implementation ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install compiler and OpenSSL
+        run: sudo apt-get update && sudo apt-get install -y build-essential libssl-dev
+      - name: Build all programs
+        run: make all
+      - name: Smoke tests
+        run: bash smoke.sh

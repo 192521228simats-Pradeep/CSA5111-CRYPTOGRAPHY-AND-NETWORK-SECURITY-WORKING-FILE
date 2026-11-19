@@ -1,0 +1,4 @@
+/* CSA5111 Question 22: independent executable */
+#include "common/crypto_common.h"
+static void q22(void){char h[512];unsigned char p[256],c[256],d[256];readstr("Plaintext hex (worksheet test 0123): ",h,sizeof h);int n=unhex(h,p,256),key=(int)readint("10-bit S-DES key decimal (509 = 0111111101): "),iv=(int)readint("8-bit IV decimal (170 = 10101010): ");if(n<1||key<0||key>1023||iv<0||iv>255){puts("Invalid input.");return;}int chain=iv;for(int i=0;i<n;i++)c[i]=(unsigned char)sdes_byte(p[i]^chain,key,0),chain=c[i];printf("S-DES CBC ciphertext: ");printhex(c,n);chain=iv;for(int i=0;i<n;i++){d[i]=(unsigned char)(sdes_byte(c[i],key,1)^chain);chain=c[i];}printf("Decrypted: ");printhex(d,n);if(n==2&&key==509&&iv==170&&p[0]==1&&p[1]==35)puts("Worksheet expected vector: F40B.");}
+int main(void){ OSSL_PROVIDER_load(NULL,"default"); OSSL_PROVIDER_load(NULL,"legacy"); q22(); return 0; }
