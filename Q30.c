@@ -1,0 +1,4 @@
+/* CSA5111 Question 30: independent executable */
+#include "common/crypto_common.h"
+static void q30(void){char kh[128],xh[128];unsigned char key[16],X[16],T[16],Y[16],Z[16];readstr("AES-128 key (32 hex digits): ",kh,sizeof kh);readstr("One-block X (32 hex digits): ",xh,sizeof xh);if(unhex(kh,key,16)!=16||unhex(xh,X,16)!=16){puts("Need 16-byte key and one 16-byte block.");return;}aes_block(key,X,T);for(int i=0;i<16;i++)Y[i]=X[i]^T[i];for(int i=0;i<16;i++)Z[i]=Y[i]^T[i];unsigned char tag[16];aes_block(key,Z,tag);printf("T = CBC-MAC(X) = ");printhex(T,16);printf("Second block X XOR T = ");printhex(Y,16);printf("CBC-MAC(X || (X XOR T)) = ");printhex(tag,16);puts("Tags match: this demonstrates why plain CBC-MAC is unsafe for variable-length messages. Use CMAC.");}
+int main(void){ OSSL_PROVIDER_load(NULL,"default"); OSSL_PROVIDER_load(NULL,"legacy"); q30(); return 0; }
